@@ -19,15 +19,19 @@
                         <div class="card-body">
                             <h5 class="card-title">{{ $product->name }}</h5>
                             <p class="card-text">{{ $product->description }}</p>
+                            <p><img src="{{asset("storage/$product->image")}}" alt="" width="150px" height="100px"></p>
                             <p class="card-text text-dark">${{ $product->price }}</p>
                             <p class="card-text text-danger">Số lượt xem: {{ $product->view_count }}</p>
 
                             <!-- Nút XEM chuyển hướng người dùng sang trang chi tiết -->
                             <a href="{{ route('show', $product->id) }}" class="btn btn-primary">Xem</a>
+                            <a class="btn btn-primary" href="{{route('create')}}">Them</a>
+                            <a class="btn btn-primary" href="{{route('delete', $product->id)}}" onclick="return confirm('ban co chac muon xoa')">Xoa</a>
                         </div>
                     </div>
                 </div>
             @endforeach
         @endif
     </div>
+    {{$products->links()}}
 @endsection

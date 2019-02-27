@@ -10,7 +10,7 @@ use Illuminate\Support\Facades\Session as SessionAlias;
 class ProductController extends Controller
 {
     public function index(){
-        $products = Product::all();
+        $products = Product::paginate(3);
         return view('index', compact('products'));
     }
     public function show($id){
@@ -23,5 +23,29 @@ class ProductController extends Controller
 
         $product = Product::find($id);
         return view('show', compact('product'));
+    }
+    public function create(){
+        return view('create');
+    }
+    public function insert(Request $request){
+        $product = new Product();
+        $product->name = $request->input('name');
+        $product->description = $request->input('description');
+        $product->price = $request->input('price');
+        $product->view_count = 0;
+        if($request->hasFile('image')){
+            $image = $request->file('image');
+            $path = $image->store('images', 'public');
+            $product->image = $path;
+        }else{
+            $product->image = 'Null';
+        }
+        $product->save();
+        return redirect()->route('index',compact('product'));
+    }
+    public function delete($id){
+        $product = Product::find($id);
+        $product->delete();
+        return redirect()->route('index', compact('product'));
     }
 }
